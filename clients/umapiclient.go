@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 
-	adobeCcModels "snowsoftware.com/saas/adobe-creative-cloud-data-collector/models"
+	adobeCcModels "github.com/shtrule/adobe-umapi-client-go/models"
 )
 
 type AdobeClient interface {

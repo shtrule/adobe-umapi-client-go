@@ -4,12 +4,10 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
-
-	cc "snowsoftware.com/saas/adobe-creative-cloud-data-collector/models"
 )
 
 type AdobeAuthClient interface {
-	GetToken() (cc.Token, error)
+	GetToken() (models.Token, error)
 }
 
 type AuthClient struct {
@@ -33,13 +31,13 @@ func (client AuthClient) GetToken() (cc.Token, error) {
 
 	responseBody, err := GetTokenRequest(exchangeJwtUrl, bodyData)
 	if err != nil {
-		return cc.Token{}, err
+		return models.Token{}, err
 	}
-	var token cc.Token
+	var token models.Token
 	err = json.Unmarshal(responseBody, &token)
 
 	if err != nil {
-		return cc.Token{}, fmt.Errorf("failed to unmarshal response body to token: %s", err.Error())
+		return models.Token{}, fmt.Errorf("failed to unmarshal response body to token: %s", err.Error())
 	}
 
 	return token, nil
