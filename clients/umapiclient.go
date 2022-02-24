@@ -9,6 +9,7 @@ import (
 
 type AdobeClient interface {
 	GetUsers() ([]models.User, error)
+	GetUser(userEmail string) (models.User, error)
 	GetGroups() ([]models.Group, error)
 }
 
@@ -63,7 +64,7 @@ func (client UmapiClient) GetUsers() ([]models.User, error) {
 	var (
 		pageNumber = 0
 		users      []models.User
-		userRoot   models.UserRoot
+		userRoot   models.UsersRoot
 	)
 
 	for {
@@ -89,4 +90,22 @@ func (client UmapiClient) GetUsers() ([]models.User, error) {
 	}
 
 	return users, nil
+}
+
+func (client UmapiClient) GetUser(userEmail string) (models.User, error) {
+	var userRoot models.UserRoot
+
+	url := fmt.Sprintf("https://usermanagement.adobe.io/v2/usermanagement/organizations/%v/users/%v", client.OrganizationId, userEmail)
+
+	responseBody, err := GetRequest(url, client.Token, client.ClientId)
+
+	if err != nil {
+		return models.User{}, err
+	}
+
+	if err := json.Unmarshal(responseBody, &userRoot); err != nil {
+		return models.User{}, fmt.Errorf("unable to convert response body to Users, error: %s", err.Error())
+	}
+
+	return userRoot.User, nil
 }

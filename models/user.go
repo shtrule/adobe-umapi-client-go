@@ -1,10 +1,15 @@
 package models
 
 //UserRoot Adobe CC portal users
-type UserRoot struct {
+type UsersRoot struct {
 	LastPage bool   `json:"lastPage"`
 	Result   string `json:"result"`
 	Users    []User `json:"users"`
+}
+
+type UserRoot struct {
+	Result string `json:"result"`
+	User   User   `json:"user"`
 }
 
 //User Adobe CC user type
