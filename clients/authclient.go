@@ -4,6 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/url"
+
+	"github.com/shtrule/adobe-umapi-client-go/models"
 )
 
 type AdobeAuthClient interface {
@@ -20,7 +22,7 @@ func NewAuthClient(clientId, clientSecret, jwtToken string) *AuthClient {
 	return &AuthClient{ClientId: clientId, ClientSecret: clientSecret, JwtToken: jwtToken}
 }
 
-func (client AuthClient) GetToken() (cc.Token, error) {
+func (client AuthClient) GetToken() (models.Token, error) {
 	bodyData := url.Values{}
 
 	bodyData.Add("client_id", client.ClientId)

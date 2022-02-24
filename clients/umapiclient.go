@@ -4,12 +4,12 @@ import (
 	"encoding/json"
 	"fmt"
 
-	adobeCcModels "github.com/shtrule/adobe-umapi-client-go/models"
+	models "github.com/shtrule/adobe-umapi-client-go/models"
 )
 
 type AdobeClient interface {
-	GetUsers() ([]adobeCcModels.User, error)
-	GetGroups() ([]adobeCcModels.Group, error)
+	GetUsers() ([]models.User, error)
+	GetGroups() ([]models.Group, error)
 }
 
 type UmapiClient struct {
@@ -27,11 +27,11 @@ func NewUmapiClient(clientId string, organizationId string, token string) *Umapi
 }
 
 //TODO: Extract a GetRequest method to a class with builder pattern
-func (client UmapiClient) GetGroups() ([]adobeCcModels.Group, error) {
+func (client UmapiClient) GetGroups() ([]models.Group, error) {
 	var (
 		pageNumber = 0
-		groups     []adobeCcModels.Group
-		groupRoot  adobeCcModels.GroupRoot
+		groups     []models.Group
+		groupRoot  models.GroupRoot
 	)
 
 	for {
@@ -59,11 +59,11 @@ func (client UmapiClient) GetGroups() ([]adobeCcModels.Group, error) {
 	return groups, nil
 }
 
-func (client UmapiClient) GetUsers() ([]adobeCcModels.User, error) {
+func (client UmapiClient) GetUsers() ([]models.User, error) {
 	var (
 		pageNumber = 0
-		users      []adobeCcModels.User
-		userRoot   adobeCcModels.UserRoot
+		users      []models.User
+		userRoot   models.UserRoot
 	)
 
 	for {
