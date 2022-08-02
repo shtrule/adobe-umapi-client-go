@@ -11,6 +11,7 @@ type AdobeClient interface {
 	GetUsers() ([]models.User, error)
 	GetUser(userEmail string) (models.User, error)
 	GetGroups() ([]models.Group, error)
+	GetUsersByGroup(groupName string) ([]models.User, error)
 }
 
 type UmapiClient struct {
@@ -108,4 +109,36 @@ func (client UmapiClient) GetUser(userEmail string) (models.User, error) {
 	}
 
 	return userRoot.User, nil
+}
+
+func (client UmapiClient) GetUsersByGroup(groupName string) ([]models.User, error) {
+	var (
+		pageNumber = 0
+		users      []models.User
+		userRoot   models.UsersRoot
+	)
+
+	for {
+		url := fmt.Sprintf("https://usermanagement.adobe.io/v2/usermanagement/users/%v/%v/%v", client.OrganizationId, pageNumber, groupName)
+
+		responseBody, err := GetRequest(url, client.Token, client.ClientId)
+
+		if err != nil {
+			return users, err
+		}
+
+		if err := json.Unmarshal(responseBody, &userRoot); err != nil {
+			return users, fmt.Errorf("unable to convert response body to Users, error: %s", err.Error())
+		}
+
+		users = append(users, userRoot.Users...)
+
+		if userRoot.LastPage {
+			break
+		}
+
+		pageNumber++
+	}
+
+	return users, nil
 }
